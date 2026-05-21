@@ -68,6 +68,7 @@ export default function Register() {
       console.log("Form Submitted:", formData);
 
       // API call goes here
+	  
     }
   };
 
