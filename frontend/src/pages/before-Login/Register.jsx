@@ -61,16 +61,30 @@ export default function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (validate()) {
-      console.log("Form Submitted:", formData);
+  if (validate()) {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-      // API call goes here
-	  
+      const data = await response.json();
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
     }
-  };
+  }
+};
 
   return (
     <div style={styles.container}>
