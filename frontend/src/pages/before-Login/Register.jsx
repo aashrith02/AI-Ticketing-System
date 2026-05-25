@@ -78,9 +78,15 @@ const handleSubmit = async (e) => {
       );
 
       const data = await response.json();
-
+      if (!response.ok){
+        alert(data.message);
+        console.log(data);
+        return;
+      }
+      alert("User Registered sucessfully");
       console.log(data);
     } catch (error) {
+
       console.log(error);
     }
   }

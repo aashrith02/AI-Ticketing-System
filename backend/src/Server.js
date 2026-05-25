@@ -1,22 +1,41 @@
 import express from "express";
 import cors from "cors";
+import { PrismaClient } from "@prisma/client";
 
 const app = express();
 
+const prisma = new PrismaClient();
+
 app.use(cors());
-
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("Backend working");
-});
 
 app.post("/api/auth/register", async (req, res) => {
   try {
-    console.log(req.body);
+    const { name, email, password } = req.body;
+
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password,
+      },
+    });
 
     res.status(201).json({
-      message: "User registered",
+      message: "User created",
+      user,
     });
   } catch (error) {
     console.log(error);
