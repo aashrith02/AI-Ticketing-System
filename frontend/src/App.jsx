@@ -1,10 +1,14 @@
-import Register from "/Users/aashrithamajala/Desktop/AI-Ticket-System/frontend/src/pages/before-Login/Register.jsx";
+import { Routes, Route } from "react-router-dom";
+
+import Register from "./pages/before-Login/Register";
+import Login from "./pages/before-Login/Login";
 
 function App() {
   return (
-    <div>
-      <Register />
-    </div>
+    <Routes>
+      <Route path="/" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 }
 
