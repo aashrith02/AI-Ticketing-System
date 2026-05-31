@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -55,9 +58,17 @@ export default function Login() {
         return;
       }
 
+      if (!data.user) {
+        console.error("Login response missing user data", data);
+        alert("Login succeeded, but user data is missing.");
+        return;
+      }
+
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       alert("Login successful");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
       alert("Something went wrong");
