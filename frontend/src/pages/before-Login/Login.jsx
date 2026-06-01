@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function Login() {
@@ -107,6 +108,11 @@ export default function Login() {
         {errors.password && <p>{errors.password}</p>}
 
         <button type="submit">Login</button>
+
+        <button type="button" onClick={() => navigate("/register")}>
+          Register
+        </button>
+        
       </form>
     </div>
   );
