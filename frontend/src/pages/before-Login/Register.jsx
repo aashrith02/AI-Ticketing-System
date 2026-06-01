@@ -1,8 +1,10 @@
 // Register.jsx
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -153,6 +155,10 @@ const handleSubmit = async (e) => {
 
         <button type="submit" style={styles.button}>
           Register
+        </button>
+
+        <button type="button"  onClick={() => navigate("/login")}>
+          Already have an account? Login
         </button>
       </form>
     </div>
