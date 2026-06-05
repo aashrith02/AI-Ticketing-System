@@ -7,9 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Ticket {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  status        String   @default("OPEN")
+  priority      String   @default("MEDIUM")
+  createdAt     DateTime @default(now())
+
+  userId        Int
+  user          User     @relation("CreatedTickets", fields: [userId], references: [id])
+
+  assignedToId  Int?
+  assignedTo    User?    @relation("AssignedTickets", fields: [assignedToId], references: [id])
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+
+  createdTickets  Ticket[] @relation("CreatedTickets")
+  assignedTickets Ticket[] @relation("AssignedTickets")
+}
