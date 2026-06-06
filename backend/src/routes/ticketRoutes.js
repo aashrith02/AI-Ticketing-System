@@ -27,3 +27,4 @@ router.post("/createTicket", async (req, res) => {
         res.status(500).json({ error: "Failed to create ticket" });
     }
 });
+export default router;
