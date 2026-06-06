@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./pages/before-Login/Register";
 import Login from "./pages/before-Login/Login";
 import Dashboard from "./pages/after-Login/Dashboard";
-import CreateTicket from "./pages/after-Login/Create-cTicket";
+import CreateTicket from "./pages/after-Login/Create-Ticket";
 
 function App() {
   return (
