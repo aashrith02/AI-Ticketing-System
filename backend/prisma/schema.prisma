@@ -20,6 +20,9 @@ model Ticket {
 
   assignedToId  Int?
   assignedTo    User?    @relation("AssignedTickets", fields: [assignedToId], references: [id])
+
+  assignedGroupId Int?
+  assignedGroup   PublicGroups? @relation("GroupTickets",fields: [assignedGroupId], references: [id])
 }
 
 model User {
@@ -30,4 +33,15 @@ model User {
 
   createdTickets  Ticket[] @relation("CreatedTickets")
   assignedTickets Ticket[] @relation("AssignedTickets")
+  groups          PublicGroups[] @relation("GroupUsers")
+}
+
+model PublicGroups{
+  id Int @id @default(autoincrement())
+  name String
+  
+  publicGroupParticipants User[] @relation("GroupUsers")
+  publicGroupTickets Ticket[] @relation("GroupTickets")
+
+
 }
