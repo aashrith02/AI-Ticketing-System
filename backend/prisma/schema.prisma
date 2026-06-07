@@ -7,27 +7,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Ticket {
-  id            Int      @id @default(autoincrement())
-  title         String
-  description   String
-  status        String   @default("OPEN")
-  priority      String   @default("MEDIUM")
-  createdAt     DateTime @default(now())
-
-  userId        Int
-  user          User     @relation("CreatedTickets", fields: [userId], references: [id])
-
-  assignedToId  Int?
-  assignedTo    User?    @relation("AssignedTickets", fields: [assignedToId], references: [id])
-}
-
 model User {
-  id       Int      @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   name     String
-  email    String   @unique
+  email    String @unique
   password String
 
-  createdTickets  Ticket[] @relation("CreatedTickets")
+  // Tickets created by this user
+  createdTickets Ticket[] @relation("CreatedTickets")
+
+  // Tickets currently owned by this user
   assignedTickets Ticket[] @relation("AssignedTickets")
+
+  // Queue memberships
+  queueMemberships QueueMember[]
 }
+
+model Ticket {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+
+  status      String   @default("OPEN")
+  priority    String   @default("MEDIUM")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Creator
+  userId      Int
+  user        User? @relation("CreatedTickets", fields: [userId], references: [id])
+
+  // Current owner (optional)
+  assignedToId Int?
+  assignedTo   User? @relation("AssignedTickets", fields: [assignedToId], references: [id])
+
+  // Queue assignment
+  queueId     Int?
+  queue       Queue? @relation(fields: [queueId], references: [id])
+}
+
+model Queue {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String?
+
+  tickets     Ticket[]
+
+  members     QueueMember[]
+}
+
+model QueueMember {
+  id       Int @id @default(autoincrement())
+
+  userId   Int
+  queueId  Int
+
+  user     User  @relation(fields: [userId], references: [id])
+  queue    Queue @relation(fields: [queueId], references: [id])
+
+  role     String @default("MEMBER")
+
+  @@unique([userId, queueId])
+} 
