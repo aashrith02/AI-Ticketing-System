@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 router.post("/createTicket", async (req, res) => {
     try {
-        const { title, description, status, priority, assignedTo, userId } = req.body;
+        const { title, description, status, priority, queueId, userId } = req.body;
 
         const ticket = await prisma.ticket.create({
             data: {
@@ -16,7 +16,7 @@ router.post("/createTicket", async (req, res) => {
                 description,
                 status,
                 priority,
-                assignedTo,
+                queueId,
                 userId
             }
         });

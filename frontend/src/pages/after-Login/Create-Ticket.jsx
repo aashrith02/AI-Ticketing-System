@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function CreateTicket() {
   let user = null;
@@ -13,8 +14,29 @@ export default function CreateTicket() {
     title: "",
     description: "",
     priority: "MEDIUM",
-    assignedTo: "",
+    queueId: "",
   });
+
+  const [queues, setQueues] = useState([]);
+
+  useEffect(() => {
+  fetchQueues();
+}, []);
+
+const fetchQueues = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8000/api/queues/getAllQueues"
+    );
+
+    const data = await response.json();
+    console.log("Fetched queues:", data);
+
+    setQueues(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -23,15 +45,39 @@ export default function CreateTicket() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log({
       ...formData,
-      createdBy: user?.name,
+      userId: user?.id,
+    });
+    
+
+    const requestBody = {
+      title: formData.title,
+      description: formData.description,
+      priority: formData.priority,
+      queueId: parseInt(formData.queueId, 10),
+      userId: user?.id,
+    };
+
+    const response = await fetch("http://localhost:8000/api/tickets/createTicket", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
     });
 
-    alert("Ticket creation coming next!");
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Failed to create ticket", data);
+        alert(data.message || "Failed to create ticket");
+      return;
+    }
+    alert("Ticket created successfully!");
   };
 
   return (
@@ -74,14 +120,25 @@ export default function CreateTicket() {
           <option value="CRITICAL">Critical</option>
         </select>
 
-        <input
-          type="text"
-          name="assignedTo"
-          placeholder="Assign To (optional)"
-          value={formData.assignedTo}
-          onChange={handleChange}
-          style={styles.input}
-        />
+        <select
+        name="queueId"
+        value={formData.queueId}
+        onChange={handleChange}
+        style={styles.input}
+        >
+        <option value="">
+            Select Queue
+        </option>
+
+        {queues.map((queue) => (
+            <option
+            key={queue.id}
+            value={queue.id}
+            >
+            {queue.name}
+            </option>
+        ))}
+        </select>
 
         <button type="submit" style={styles.button}>
           Create Ticket
