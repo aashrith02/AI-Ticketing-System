@@ -1,9 +1,13 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+
 
 import authRoutes from "./routes/authRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
 import queueRoutes from "./routes/queueRoutes.js";
+
+dotenv.config();
 
 
 const app = express();

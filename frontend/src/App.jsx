@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Register from "./pages/before-Login/Register";
 import Login from "./pages/before-Login/Login";
-import Dashboard from "./pages/after-Login/Dashboard";
+import Dashboard from "./pages/after-Login/User-Dashboard";
 import Ticket from "./pages/after-Login/Ticket";
 
 function App() {

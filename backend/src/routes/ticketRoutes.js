@@ -2,6 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -68,4 +69,27 @@ router.put("/updateTicket/:id", async (req, res) => {
 		res.status(500).json({ error: "Failed to update ticket" });
 	}
 });
+
+router.get("/myTickets", authenticate, async (req, res) => {
+  try {
+	const tickets = await prisma.ticket.findMany({
+	where: {
+		userId: req.user.id,
+	},
+	include: {
+		queue: true,
+		assignedTo: true,
+	},
+	});
+
+    res.json(tickets);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to fetch tickets",
+    });
+  }
+});
+
 export default router;
