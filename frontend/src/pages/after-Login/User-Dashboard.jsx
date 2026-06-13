@@ -74,7 +74,7 @@ export default function Dashboard() {
       <button
         style={styles.button}
         onClick={() =>
-          navigate("/tickets/new")
+          navigate("/tickets/create-ticket")
         }
       >
         + Create Ticket
@@ -84,7 +84,7 @@ export default function Dashboard() {
         My Tickets
       </h2>
 
-      <TicketList tickets={tickets} />
+      <TicketList tickets={tickets} showQueueFilter = {true} />
     </div>
   );
 }
