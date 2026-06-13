@@ -67,6 +67,7 @@ export default function Login() {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+      console.log("Login successful, user data:", JSON.stringify(data.user));
 
       alert("Login successful");
       navigate("/dashboard");
