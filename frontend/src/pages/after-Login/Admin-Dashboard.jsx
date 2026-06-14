@@ -38,12 +38,13 @@ export default function AdminDashboard() {
         .then((res) => res.json())
         .then((data) => {
           const queues = Array.isArray(data) ? data : data?.queues ?? [];
-          return queues.map((queue) => queue.id);
+          return queues.map((queue) => queue.queueId);
         })
         .catch((error) => {
           console.error("Error fetching queues for user:", error);
           return [];
         });
+      console.log("queueids:", queueIds);
 
       if (!queueIds.length) {
         setTickets([]);
@@ -103,7 +104,7 @@ export default function AdminDashboard() {
       <button
         style={styles.button}
         onClick={() =>
-          navigate("/tickets/new")
+          navigate("/tickets/create-ticket")
         }
       >
         + Create Ticket
@@ -113,7 +114,7 @@ export default function AdminDashboard() {
         My Tickets
       </h2>
 
-      <TicketList tickets={tickets} />
+      <TicketList tickets={tickets} showQueueFilter = {true} />
     </div>
   );
 }

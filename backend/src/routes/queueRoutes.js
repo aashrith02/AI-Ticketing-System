@@ -26,16 +26,12 @@ router.get("/getQueuesForUser/:userId", async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const queues = await prisma.queue.findMany({
+    const queues = await prisma.QueueMember.findMany({
       where: {
-        queueMemberships: {
-          some: {
             userId: parseInt(userId),
-          },
-        },
       },
       orderBy: {
-        name: "asc",
+        queueId: "asc",
       },
     });
 
