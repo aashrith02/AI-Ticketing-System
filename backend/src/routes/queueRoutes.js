@@ -22,4 +22,27 @@ router.get("/getAllQueues", async (req, res) => {
   }
 });
 
+router.get("/getQueuesForUser/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const queues = await prisma.QueueMember.findMany({
+      where: {
+            userId: parseInt(userId),
+      },
+      orderBy: {
+        queueId: "asc",
+      },
+    });
+
+    res.json(queues);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to fetch queues for user, exception in queueRoutes.js",
+    });
+  }
+}); 
+
 export default router;
