@@ -92,4 +92,35 @@ router.get("/myTickets", authenticate, async (req, res) => {
   }
 });
 
+const fetchUnassignedTicketsInQueue = async (req, res) => {
+  try {
+    const rawQueueIds = req.params.queueIds || "";
+    const queueIds = rawQueueIds
+      .split(",")
+      .map((value) => Number(value.trim()))
+      .filter((value) => Number.isInteger(value) && value > 0);
+
+    const tickets = await prisma.ticket.findMany({
+      where: {
+        queueId: {
+          in: queueIds,
+        },
+        assignedToId: null,
+      },
+      include: {
+        queue: true,
+        assignedTo: true,
+      },
+    });
+
+    res.json(tickets);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch unassigned tickets" });
+  }
+};
+
+router.get("/unassignedTicketsInQueue/:queueIds", authenticate, fetchUnassignedTicketsInQueue);
+router.get("/uassignedTicketsInQueue/:queueIds", authenticate, fetchUnassignedTicketsInQueue);
+
 export default router;

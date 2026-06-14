@@ -52,13 +52,6 @@ router.post("/login", async (req, res) => {
 			where: {
 				email,
 			},
-			include: {
-				queueMemberships: {
-					include: {
-						queue: true,
-					},
-				},
-			},
 		});
 
 		if (!user) {
