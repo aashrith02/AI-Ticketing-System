@@ -84,11 +84,7 @@ router.post("/login", async (req, res) => {
 			user: {
 				id: user.id,
 				name: user.name,
-				email: user.email,
-				queues: user.queueMemberships.map((membership) => ({
-					id: membership.queue.id,
-					name: membership.queue.name,
-				})),
+				email: user.email
 			},
 		});
 	} catch (error) {
