@@ -46,6 +46,7 @@ export default function CreateTicket() {
 		console.error("Failed to parse user from localStorage", error);
 	}
 
+
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
@@ -81,13 +82,14 @@ export default function CreateTicket() {
 		}));
 	};
 
-	const updateTicket = async () => {
+	const updateTicket = async (assignToLoggedInUser = false) => {
 		try {
 			const requestBody = {
 				title: formData.title,
 				description: formData.description,
 				priority: formData.priority,
 				queueId: parseInt(formData.queueId, 10),
+				assignedToId: assignToLoggedInUser ? user?.id : undefined,	
 			};
 
 			const response = await fetch(
@@ -217,6 +219,16 @@ export default function CreateTicket() {
 						Update Ticket
 					</button>
 				)}
+
+				{ user?.supportUser ?(
+					<button
+						type="button"
+						style={{ ...styles.button, backgroundColor: "#007bff", color: "#fff" }}
+						onClick={() => updateTicket({ assignToLoggedInUser: true })}
+					>
+						Asssign to me
+					</button>
+				) : null }
 			</form>
 		</div>
 	);
