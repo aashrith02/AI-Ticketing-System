@@ -50,8 +50,7 @@ router.get("/getTicket/:id", async (req, res) => {
 router.put("/updateTicket/:id", async (req, res) => {
 	try {
 		const id = parseInt(req.params.id);
-		const { title, description, status, priority, queueId } = req.body;
-
+		const { title, description, status, priority, queueId, assignedToId } = req.body;
 		const ticket = await prisma.ticket.update({
 			where: { id },
 			data: {
@@ -60,6 +59,7 @@ router.put("/updateTicket/:id", async (req, res) => {
 				status,
 				priority,
 				queueId,
+				assignedToId: req.body.assignedToId || null,
 			},
 		});
 

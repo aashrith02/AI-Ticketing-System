@@ -21,6 +21,8 @@ model User {
 
   // Queue memberships
   queueMemberships QueueMember[]
+
+  supportUser Boolean @default(false)
 }
 
 model Ticket {
