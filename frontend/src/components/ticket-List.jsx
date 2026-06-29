@@ -57,6 +57,7 @@ export default function TicketList({
             <th style={styles.th}>Priority</th>
             <th style={styles.th}>Status</th>
             <th style={styles.th}>Created</th>
+            <th style={styles.th}>Owner</th>
           </tr>
         </thead>
 
@@ -117,10 +118,14 @@ export default function TicketList({
                 </span>
               </td>
 
-                <td style={styles.td}>
+              <td style={styles.td}>
                   {new Date(
                     ticket.createdAt
                   ).toLocaleDateString()}
+              </td>
+
+              <td style={styles.td}>
+                  {ticket.assignedTo?.name || "-"}
               </td>
             </tr>
             ))
