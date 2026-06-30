@@ -8,6 +8,7 @@ export default function TicketList({
   const navigate = useNavigate();
 
   const [selectedQueue, setSelectedQueue] = useState("");
+  const [assignmentFilter, setAssignmentFilter] = useState("all");
 
   const queues = [
   ...new Map(
@@ -17,17 +18,50 @@ export default function TicketList({
   ).values(),
 ];
 
-  const filteredTickets = selectedQueue
+const filteredTickets = selectedQueue
   ? tickets.filter(
       (ticket) =>
         ticket.queueId?.toString() === selectedQueue
     )
   : tickets;
 
+const filteredByAssignment = filteredTickets.filter((ticket) => {
+  if (assignmentFilter === "assigned") {
+    return !!ticket.assignedTo;
+  }
+
+  if (assignmentFilter === "unassigned") {
+    return !ticket.assignedTo;
+  }
+
+  return true;
+});
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <h2>Tickets</h2>
+        <div className="filter-toggle">
+            <button
+              onClick={() => setAssignmentFilter("all")}
+              className={assignmentFilter === "all" ? "active" : ""}
+            >
+              All
+            </button>
+
+            <button
+              onClick={() => setAssignmentFilter("assigned")}
+              className={assignmentFilter === "assigned" ? "active" : ""}
+            >
+              Assigned
+            </button>
+
+            <button
+              onClick={() => setAssignmentFilter("unassigned")}
+              className={assignmentFilter === "unassigned" ? "active" : ""}
+            >
+              Unassigned
+            </button>
+          </div>
 
         {showQueueFilter && (
           <select
@@ -43,6 +77,7 @@ export default function TicketList({
               <option key={queue.id} value={queue.id}>
                 {queue.name}
               </option>
+
             ))}
           </select>
         )}
@@ -62,7 +97,7 @@ export default function TicketList({
         </thead>
 
         <tbody>
-          {filteredTickets.length === 0 ? (
+          {filteredByAssignment.length === 0 ? (
             <tr>
               <td
                 colSpan="6"
@@ -72,7 +107,7 @@ export default function TicketList({
               </td>
             </tr>
           ) : (
-            filteredTickets.map((ticket) => (
+            filteredByAssignment.map((ticket) => (
             <tr
               key={ticket.id}
               style={styles.row}
